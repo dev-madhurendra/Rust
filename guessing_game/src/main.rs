@@ -1,24 +1,42 @@
-// Import the standard library module 'io' for input/output operations
 use std::io;
+use std::cmp::Ordering;
+use rand::Rng; // Add this line to your code to bring the rand crate into scope
 
-// The entry point of the program
 fn main() {
-    // Print a message to the console
     println!("Guess the number!");
 
-    // Prompt the user to input a guess
-    println!("Please input your guess.");
+    // Generate a random secret number between 1 and 100
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+    println!("Secret number is : {}", secret_number);
 
-    // Create a mutable String to store the user's input
-    // By default all the variables are immutable in rust
-    let mut guess = String::new();
+    loop {
+        println!("Please input your guess.");
 
-    // Read a line from standard input (the console) and store it in the 'guess' variable
-    // 'read_line' returns a Result, and 'expect' is used to handle any errors that may occur
-    io::stdin()
-    .read_line(&mut guess)
-    .expect("Failed to read !");
+        let mut guess = String::new();
 
-    // Print the user's guessed value using string interpolation
-    println!("You guessed: {}", guess);
+        // Read a line from standard input (the console) and store it in the 'guess' variable
+        io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+
+        // Parse the string 'guess' into an unsigned 32-bit integer (u32)
+        // let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+
+        // Print the user's guessed value using string interpolation
+        println!("You guessed: {}", guess);
+
+        // Compare the user's guess with the secret number using a match statement
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            },
+        }
+   }
 }
