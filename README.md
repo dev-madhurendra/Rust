@@ -1,2 +1,1 @@
-# Rust
-This repository contains basic learnings of rust programming language.
+# Rust-Programming-Language
